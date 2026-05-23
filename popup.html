@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PsychNote</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --surface: #13161e;
+      --surface2: #1a1e29;
+      --border: #252a38;
+      --accent: #7eb8a4;
+      --accent2: #c4a882;
+      --danger: #c47a7a;
+      --text: #e8e4dc;
+      --text-dim: #7a8099;
+      --text-faint: #3d4259;
+      --pulse: #7eb8a4;
+      --red-pulse: #c47a7a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 380px;
+      min-height: 520px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      padding: 20px 22px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent) 0%, #4a8f78 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-mark svg { width: 18px; height: 18px; }
+
+    .header-text h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 17px;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .header-text p {
+      font-size: 9px;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .status-dot {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-faint);
+      transition: all 0.3s;
+    }
+
+    .dot.active {
+      background: var(--danger);
+      box-shadow: 0 0 8px var(--danger);
+      animation: pulse-dot 1.4s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Main content */
+    .content { padding: 20px 22px; }
+
+    /* Record controls */
+    .record-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+
+    .record-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+    }
+
+    .sources {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .source-toggle {
+      flex: 1;
+      padding: 10px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-dim);
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .source-toggle.on {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(126, 184, 164, 0.07);
+    }
+
+    .source-toggle svg { width: 16px; height: 16px; }
+
+    /* Big record button */
+    .btn-record {
+      width: 100%;
+      padding: 15px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent) 0%, #4a9e84 100%);
+      color: #0a1510;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-record:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-record:active { transform: translateY(0); }
+
+    .btn-record.recording {
+      background: linear-gradient(135deg, var(--danger) 0%, #a85555 100%);
+      color: #1a0808;
+      animation: rec-glow 2s infinite;
+    }
+
+    @keyframes rec-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(196, 122, 122, 0); }
+      50% { box-shadow: 0 0 20px 4px rgba(196, 122, 122, 0.3); }
+    }
+
+    .btn-record:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Timer */
+    .timer {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      color: var(--danger);
+      font-family: 'DM Mono', monospace;
+      display: none;
+    }
+
+    .timer.visible { display: block; }
+
+    /* Progress section */
+    .progress-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .progress-section.visible { display: block; }
+
+    .progress-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step:last-child { border-bottom: none; }
+
+    .step-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 10px;
+      transition: all 0.3s;
+    }
+
+    .step-icon.pending { color: var(--text-faint); }
+    .step-icon.loading { border-color: var(--accent2); color: var(--accent2); animation: spin 1s linear infinite; }
+    .step-icon.done { border-color: var(--accent); color: var(--accent); background: rgba(126,184,164,0.1); }
+    .step-icon.error { border-color: var(--danger); color: var(--danger); background: rgba(196,122,122,0.1); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .step-info { flex: 1; }
+    .step-name { font-size: 10px; letter-spacing: 0.05em; color: var(--text); margin-bottom: 2px; }
+    .step-detail { font-size: 9px; color: var(--text-dim); }
+
+    /* Output section */
+    .output-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .output-section.visible { display: block; }
+
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .output-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .btn-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 4px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+
+    .transcript-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 10px;
+      line-height: 1.7;
+      color: var(--text-dim);
+      max-height: 100px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+    }
+
+    .evolution-box {
+      background: var(--bg);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 10px;
+      line-height: 1.8;
+      color: var(--text);
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    .evolution-box .speaker-tag {
+      color: var(--accent2);
+      font-weight: 500;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* Settings link */
+    .footer {
+      padding: 0 22px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-settings {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .btn-settings:hover { color: var(--text-dim); }
+
+    .version {
+      font-size: 9px;
+      color: var(--text-faint);
+      letter-spacing: 0.05em;
+    }
+
+    /* Error toast */
+    .toast {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: var(--danger);
+      color: #1a0808;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: transform 0.3s;
+      white-space: nowrap;
+      z-index: 100;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* Settings modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      display: none;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      width: 340px;
+    }
+
+    .modal h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 16px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .field { margin-bottom: 12px; }
+
+    .field label {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 5px;
+    }
+
+    .field input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 9px 11px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .field input:focus { border-color: var(--accent); }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .btn-save {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: #0a1510;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-dim);
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo-mark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#0a1510" stroke-width="2.5" stroke-linecap="round">
+      <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+      <line x1="12" y1="19" x2="12" y2="22"/>
+    </svg>
+  </div>
+  <div class="header-text">
+    <h1>PsychNote</h1>
+    <p>Evolución clínica automática</p>
+  </div>
+  <div class="status-dot" id="statusDot">
+    <div class="dot" id="dot"></div>
+    <span id="statusText">Listo</span>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="content">
+
+  <!-- Record Section -->
+  <div class="record-section">
+    <div class="record-label">Fuentes de Audio</div>
+    <div class="sources">
+      <button class="source-toggle on" id="toggleBrowser">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+        Navegador
+      </button>
+      <button class="source-toggle on" id="toggleMic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+        </svg>
+        Micrófono
+      </button>
+    </div>
+    <button class="btn-record" id="btnRecord">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+      Iniciar Grabación
+    </button>
+    <div class="timer" id="timer">00:00:00</div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-section" id="progressSection">
+    <div class="progress-label">Procesando Sesión</div>
+
+    <div class="step" id="step-transcribe">
+      <div class="step-icon pending" id="icon-transcribe">○</div>
+      <div class="step-info">
+        <div class="step-name">Transcripción de audio</div>
+        <div class="step-detail" id="detail-transcribe">ElevenLabs Scribe v2 · Diarización activa</div>
+      </div>
+    </div>
+
+    <div class="step" id="step-analyze">
+      <div class="step-icon pending" id="icon-analyze">○</div>
+      <div class="step-info">
+        <div class="step-name">Análisis clínico IA</div>
+        <div class="step-detail" id="detail-analyze">Llama 3.3 70B · Groq API</div>
+      </div>
+    </div>
+
+    <div class="step" id="step-format">
+      <div class="step-icon pending" id="icon-format">○</div>
+      <div class="step-info">
+        <div class="step-name">Generando evolución</div>
+        <div class="step-detail" id="detail-format">Formato historia clínica</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Output -->
+  <div class="output-section" id="outputSection">
+    <div class="output-header">
+      <div class="output-label">▸ Transcripción</div>
+      <button class="btn-copy" id="btnCopyTranscript">Copiar</button>
+    </div>
+    <div class="transcript-box" id="transcriptBox"></div>
+
+    <div class="output-header" style="margin-top:14px">
+      <div class="output-label" style="color:var(--accent2)">▸ Evolución Clínica</div>
+      <button class="btn-copy" id="btnCopyEvolution">Copiar</button>
+    </div>
+    <div class="evolution-box" id="evolutionBox"></div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <button class="btn-settings" id="btnSettings">⚙ Configuración API</button>
+  <span class="version">v1.0.0</span>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>Claves API</h2>
+    <div class="field">
+      <label>ElevenLabs API Key</label>
+      <input type="password" id="inputElevenKey" placeholder="sk_..." />
+    </div>
+    <div class="field">
+      <label>Groq API Key</label>
+      <input type="password" id="inputGroqKey" placeholder="gsk_..." />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="btnCancel">Cancelar</button>
+      <button class="btn-save" id="btnSave">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
