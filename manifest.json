@@ -7,7 +7,8 @@
     "activeTab",
     "storage",
     "tabCapture",
-    "scripting"
+    "scripting",
+    "windows"
   ],
   "host_permissions": [
     "https://api.elevenlabs.io/*",
