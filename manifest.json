@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PsychNote - Grabador de Sesiones Clínicas",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Graba sesiones psicológicas y genera evoluciones clínicas automáticamente.",
   "permissions": [
     "activeTab",

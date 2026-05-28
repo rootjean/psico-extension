@@ -1,5 +1,3 @@
-// popup.js
-
 const DEFAULT_GROQ_KEY = 'gsk_...zrs3';
 
 let isRecording = false;

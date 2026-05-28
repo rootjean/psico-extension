@@ -1,14 +1,14 @@
 :root {
-  --bg: #0d0f14;
-  --surface: #13161e;
-  --surface2: #1a1e29;
-  --border: #252a38;
-  --accent: #7eb8a4;
-  --accent2: #c4a882;
-  --danger: #c47a7a;
-  --text: #e8e4dc;
-  --text-dim: #7a8099;
-  --text-faint: #3d4259;
+  --bg: #f8f5f2;
+  --surface: #ffffff;
+  --surface2: #fef3e8;
+  --border: #e8ddd4;
+  --accent: #f97316;
+  --accent2: #3b82f6;
+  --danger: #ef4444;
+  --text: #1a1210;
+  --text-dim: #7a6a5a;
+  --text-faint: #c4b5a5;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,12 +30,13 @@ body {
   align-items: center;
   gap: 12px;
   background: var(--surface);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
 .logo-mark {
   width: 36px; height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent) 0%, #4a8f78 100%);
+  background: linear-gradient(135deg, #f97316 0%, #c2520a 100%);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
@@ -68,8 +69,10 @@ body {
 .content { padding: 20px 22px; }
 
 .record-section {
-  background: var(--surface); border: 1px solid var(--border);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 14px; padding: 20px; margin-bottom: 14px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
 }
 .record-label {
   font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
@@ -79,33 +82,38 @@ body {
 .sources { display: flex; gap: 8px; margin-bottom: 18px; }
 .source-toggle {
   flex: 1; padding: 10px 8px; border-radius: 8px;
-  border: 1px solid var(--border); background: var(--bg); color: var(--text-dim);
+  border: 1.5px solid var(--border); background: var(--bg); color: var(--text-dim);
   font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.05em;
   cursor: pointer; display: flex; flex-direction: column; align-items: center;
   gap: 5px; transition: all 0.2s;
 }
-.source-toggle.on { border-color: var(--accent); color: var(--accent); background: rgba(126,184,164,0.07); }
+.source-toggle.on {
+  border-color: var(--accent); color: var(--accent);
+  background: rgba(249,115,22,0.06);
+}
 .source-toggle svg { width: 16px; height: 16px; }
 
 .btn-record {
   width: 100%; padding: 15px; border-radius: 10px; border: none;
-  background: linear-gradient(135deg, var(--accent) 0%, #4a9e84 100%);
-  color: #0a1510; font-family: 'DM Mono', monospace; font-size: 11px;
+  background: linear-gradient(135deg, #f97316 0%, #ea6b0a 100%);
+  color: #fff; font-family: 'DM Mono', monospace; font-size: 11px;
   font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   gap: 8px; transition: all 0.2s;
+  box-shadow: 0 2px 10px rgba(249,115,22,0.3);
 }
-.btn-record:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-record:hover { filter: brightness(1.07); transform: translateY(-1px); }
 .btn-record:active { transform: translateY(0); }
 .btn-record.recording {
-  background: linear-gradient(135deg, var(--danger) 0%, #a85555 100%);
-  color: #1a0808; animation: rec-glow 2s infinite;
+  background: linear-gradient(135deg, #ef4444 0%, #c53030 100%);
+  box-shadow: 0 2px 10px rgba(239,68,68,0.3);
+  animation: rec-glow 2s infinite;
 }
 @keyframes rec-glow {
-  0%,100%{box-shadow:0 0 0 0 rgba(196,122,122,0)}
-  50%{box-shadow:0 0 20px 4px rgba(196,122,122,0.3)}
+  0%,100%{box-shadow:0 2px 10px rgba(239,68,68,0.3)}
+  50%{box-shadow:0 2px 20px rgba(239,68,68,0.6)}
 }
-.btn-record:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-record:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
 .timer {
   text-align: center; margin-top: 12px; font-size: 22px;
@@ -116,7 +124,8 @@ body {
 
 .progress-section {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; display: none;
+  border-radius: 14px; padding: 18px 20px; margin-bottom: 14px;
+  display: none; box-shadow: 0 1px 6px rgba(0,0,0,0.05);
 }
 .progress-section.visible { display: block; }
 .progress-label {
@@ -136,9 +145,9 @@ body {
   flex-shrink: 0; font-size: 10px; transition: all 0.3s;
 }
 .step-icon.pending { color: var(--text-faint); }
-.step-icon.loading { border-color: var(--accent2); color: var(--accent2); animation: spin 1s linear infinite; }
-.step-icon.done { border-color: var(--accent); color: var(--accent); background: rgba(126,184,164,0.1); }
-.step-icon.error { border-color: var(--danger); color: var(--danger); background: rgba(196,122,122,0.1); }
+.step-icon.loading { border-color: var(--accent); color: var(--accent); animation: spin 1s linear infinite; }
+.step-icon.done { border-color: #22c55e; color: #22c55e; background: rgba(34,197,94,0.08); }
+.step-icon.error { border-color: var(--danger); color: var(--danger); background: rgba(239,68,68,0.08); }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .step-info { flex: 1; }
@@ -147,7 +156,8 @@ body {
 
 .output-section {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; display: none;
+  border-radius: 14px; padding: 18px 20px; margin-bottom: 14px;
+  display: none; box-shadow: 0 1px 6px rgba(0,0,0,0.05);
 }
 .output-section.visible { display: block; }
 
@@ -180,7 +190,7 @@ body {
   max-height: 100px; overflow-y: auto; margin-bottom: 10px; white-space: pre-wrap;
 }
 .evolution-box {
-  background: var(--bg); border: 1px solid var(--accent); border-radius: 8px;
+  background: #fffbf7; border: 1.5px solid var(--accent); border-radius: 8px;
   padding: 14px; font-size: 10px; line-height: 1.8; color: var(--text);
   max-height: 200px; overflow-y: auto; white-space: pre-wrap;
 }
@@ -197,13 +207,13 @@ body {
   text-transform: uppercase; background: none; border: none;
   color: var(--text-faint); cursor: pointer; transition: color 0.2s;
 }
-.btn-settings:hover { color: var(--text-dim); }
+.btn-settings:hover { color: var(--accent); }
 .version { font-size: 9px; color: var(--text-faint); letter-spacing: 0.05em; }
 
 .toast {
   position: fixed; bottom: 16px; left: 50%;
   transform: translateX(-50%) translateY(60px);
-  background: var(--danger); color: #1a0808;
+  background: var(--text); color: #fff;
   font-family: 'DM Mono', monospace; font-size: 10px;
   padding: 8px 16px; border-radius: 6px; transition: transform 0.3s;
   white-space: nowrap; z-index: 100;
@@ -211,13 +221,14 @@ body {
 .toast.show { transform: translateX(-50%) translateY(0); }
 
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  position: fixed; inset: 0; background: rgba(0,0,0,0.3);
   display: none; align-items: center; justify-content: center; z-index: 200;
 }
 .modal-overlay.open { display: flex; }
 .modal {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 14px; padding: 20px; width: 320px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
 }
 .modal h2 {
   font-family: 'DM Serif Display', serif; font-size: 16px;
@@ -229,7 +240,7 @@ body {
   text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px;
 }
 .field input {
-  width: 100%; background: var(--bg); border: 1px solid var(--border);
+  width: 100%; background: var(--bg); border: 1.5px solid var(--border);
   border-radius: 7px; padding: 9px 11px; font-family: 'DM Mono', monospace;
   font-size: 10px; color: var(--text); outline: none; transition: border-color 0.2s;
 }
@@ -237,12 +248,15 @@ body {
 .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
 .btn-save {
   flex: 1; padding: 10px; border-radius: 8px; border: none;
-  background: var(--accent); color: #0a1510; font-family: 'DM Mono', monospace;
+  background: linear-gradient(135deg, #f97316 0%, #ea6b0a 100%);
+  color: #fff; font-family: 'DM Mono', monospace;
   font-size: 10px; font-weight: 500; letter-spacing: 0.1em;
   text-transform: uppercase; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(249,115,22,0.3);
 }
 .btn-cancel {
-  padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border);
+  padding: 10px 16px; border-radius: 8px; border: 1.5px solid var(--border);
   background: none; color: var(--text-dim); font-family: 'DM Mono', monospace;
   font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
 }
+.btn-cancel:hover { border-color: var(--text-dim); }
